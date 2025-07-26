@@ -3,7 +3,7 @@ const BASE_URL = 'https://pokeapi.co/api/v2';
 export const pokemonApi = {
   async getPokemons(limit = 20) {
     try {
-      console.log(`Récupération de ${limit} Pokémon...`);
+      console.log(`Récupération de ${limit} Pokémons...`);
       
       const response = await fetch(`${BASE_URL}/pokemon?limit=${limit}`);
       
@@ -12,13 +12,11 @@ export const pokemonApi = {
       }
       
       const data = await response.json();
-      console.log('Liste reçue:', data);
 
       const pokemonDetails = [];
       
       for (let i = 0; i < data.results.length; i++) {
         const pokemon = data.results[i];
-        console.log(`Chargement de ${pokemon.name}...`);
         
         try {
           const detailResponse = await fetch(pokemon.url);
@@ -36,7 +34,33 @@ export const pokemonApi = {
       
     } catch (error) {
       console.error('Erreur dans getPokemons:', error);
-      throw new Error('Impossible de charger les Pokémons');
+    }
+  },
+
+  async searchPokemon(searchTerm) {
+    try {
+      console.log('Recherche de:', searchTerm);
+      
+      if (!searchTerm || searchTerm.trim() === '') {
+        return [];
+      }
+
+      const cleanSearchTerm = searchTerm.toLowerCase().trim();
+      
+      const response = await fetch(`${BASE_URL}/pokemon/${cleanSearchTerm}`);
+      
+      if (response.ok) {
+        const pokemon = await response.json();
+        console.log('Pokémon trouvé:', pokemon.name);
+        return [pokemon];
+      } else {
+        console.log('Pokémon non trouvé');
+        return [];
+      }
+      
+    } catch (error) {
+      console.error('Erreur lors de la recherche:', error);
+      return [];
     }
   }
 };
