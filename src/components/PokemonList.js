@@ -1,13 +1,12 @@
 import React from 'react';
 import PokemonCard from './PokemonCard';
 
-function PokemonList({ pokemons }) {
-  
+function PokemonList({ pokemons, onPokemonSelect }) {
   if (!pokemons || pokemons.length === 0) {
     return (
       <div className="empty-state">
-        <h3>Aucun Pokémons trouvé</h3>
-        <p>Il semble qu'il n'y ait pas de Pokémons à afficher.</p>
+        <h3>Aucun Pokémon trouvé</h3>
+        <p>Il semble qu'il n'y ait pas de Pokémon à afficher.</p>
       </div>
     );
   }
@@ -22,7 +21,8 @@ function PokemonList({ pokemons }) {
         {pokemons.map(pokemon => (
           <PokemonCard 
             key={pokemon.id} 
-            pokemon={pokemon} 
+            pokemon={pokemon}
+            onPokemonSelect={onPokemonSelect}
           />
         ))}
       </div>

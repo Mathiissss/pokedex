@@ -1,6 +1,6 @@
 import React from 'react';
 
-function PokemonCard({ pokemon }) {
+function PokemonCard({ pokemon, onPokemonSelect }) {
   const formatNumber = (num) => {
     return `#${num.toString().padStart(3, '0')}`;
   };
@@ -29,6 +29,11 @@ function PokemonCard({ pokemon }) {
     return colors[typeName] || '#95a5a6';
   };
 
+  const handleClick = () => {
+    console.log('Pokémon cliqué:', pokemon.name);
+    onPokemonSelect(pokemon);
+  };
+
   if (!pokemon || !pokemon.sprites) {
     return (
       <div className="pokemon-card error">
@@ -38,7 +43,7 @@ function PokemonCard({ pokemon }) {
   }
 
   return (
-    <div className="pokemon-card">
+    <div className="pokemon-card" onClick={handleClick} >
       <div className="pokemon-number">
         {formatNumber(pokemon.id)}
       </div>

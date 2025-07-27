@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PokemonList from './components/PokemonList';
 import SearchBar from './components/SearchBar';
 import LoadingSpinner from './components/LoadingSpinner';
+import PokemonDetail from './components/PokemonDetail';
 import { pokemonApi } from './services/pokemonApi';
 import './App.css';
 
@@ -10,6 +11,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedPokemon, setSelectedPokemon] = useState(null);
 
   useEffect(() => {
     loadPokemons();
@@ -62,6 +64,15 @@ function App() {
     }
   };
 
+  const handlePokemonSelect = (pokemon) => {
+    console.log('Pokémon reçu dans App.js:', pokemon.name);
+    setSelectedPokemon(pokemon);
+  };
+
+  const handleClosePokemonDetail = () => {
+  setSelectedPokemon(null);
+};
+
   return (
     <div className="App">
       <header className="app-header">
@@ -95,15 +106,23 @@ function App() {
         
         {loading ? (
           <LoadingSpinner 
-            message={searchTerm ? 
-              `Recherche de "${searchTerm}"...` : 
-              "Chargement des Pokémonss..."
-            } 
+            message={searchTerm ?
+            `Recherche de "${searchTerm}"...` : 
+            "Chargement des Pokémonss..."} 
           />
         ) : (
-          <PokemonList pokemons={pokemons} />
+          <PokemonList 
+            pokemons={pokemons} 
+            onPokemonSelect={handlePokemonSelect}
+          />
         )}
-      </main>
+        </main>
+        {selectedPokemon && (
+          <PokemonDetail 
+            pokemon={selectedPokemon}
+            onClose={handleClosePokemonDetail}
+          />
+        )}
     </div>
   );
 }
