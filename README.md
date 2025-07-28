@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+## Fonctionnalités
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- **Liste des Pokémon** : Affichage paginé de tous les Pokémons (15 par page)
+- **Recherche** : Recherche par nom ou numéro de Pokémon
+- **Filtres** : Filtrage par type (Feu, Eau, Plante, etc.)
+- **Modal détaillée** : Statistiques, types, capacités et informations complètes
+- **Pagination** : Navigation entre les pages avec ellipses intelligentes
+- **Responsive** : Interface adaptée mobile et desktop
+- **Design moderne** : Interface élégante
 
-## Available Scripts
+## Technologies utilisées
 
-In the project directory, you can run:
+- **React** (avec Hooks)
+- **JavaScript ES6+**
+- **CSS3** (Grid, Flexbox, animations)
+- **PokéAPI** pour les données
 
-### `npm start`
+## Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. **Cloner le projet**
+```bash
+git clone https://github.com/Mathiissss/pokedex.git
+cd pokedex
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. **Installer les dépendances**
+```bash
+npm install
+```
 
-### `npm test`
+3. **Lancer l'application**
+```bash
+npm start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+## Structure du projet
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Générer par IA avec un cahier des charges
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+src/
+├── components/
+│   ├── PokemonList.js      # Liste des cartes Pokémon
+│   ├── PokemonCard.js      # Carte individuelle
+│   ├── PokemonDetail.js    # Modal de détails
+│   ├── SearchBar.js        # Barre de recherche
+│   ├── FilterBar.js        # Filtre par type
+│   ├── Pagination.js       # Navigation pages
+│   └── LoadingSpinner.js   # Indicateur de chargement
+├── services/
+│   └── pokemonApi.js       # Appels API
+├── App.js                  # Composant principal
+├── App.css                 # Styles globaux
+└── index.js               # Point d'entrée
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Problèmes connus
 
-### `npm run eject`
+- Certains Pokémons peuvent ne pas avoir d'image
+- La recherche est sensible à la casse (utiliser des minuscules)
+- Limite de 50 Pokémons par type pour les performances
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Structure des composants
+- Composants fonctionnels avec Hooks
+- Props pour la communication parent-enfant
+- État local avec useState
+- Effets avec useEffect

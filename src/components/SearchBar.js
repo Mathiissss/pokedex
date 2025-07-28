@@ -5,17 +5,12 @@ function SearchBar({ onSearch }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Recherche lancée:', searchTerm);
     onSearch(searchTerm);
   };
 
-  const handleClear = () => {
+  const clearSearch = () => {
     setSearchTerm('');
     onSearch('');
-  };
-
-  const handleChange = (e) => {
-    setSearchTerm(e.target.value);
   };
 
   return (
@@ -25,30 +20,25 @@ function SearchBar({ onSearch }) {
           type="text"
           placeholder="Chercher par nom ou numéro (ex: pikachu, 25)..."
           value={searchTerm}
-          onChange={handleChange}
+          onChange={(e) => setSearchTerm(e.target.value)}
           className="search-input"
         />
         
+        {/* bouton effacer si y'a du texte */}
         {searchTerm && (
-          <button 
+          <button
             type="button"
             className="clear-btn"
-            onClick={handleClear}
-            title="Effacer la recherche"
+            onClick={clearSearch}
           >
             Effacer
           </button>
         )}
         
-        <button 
-          type="submit" 
-          className="search-btn"
-          title="Lancer la recherche"
-        >
+        <button type="submit" className="search-btn">
           Rechercher
         </button>
       </div>
-      
     </form>
   );
 }

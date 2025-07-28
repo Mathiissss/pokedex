@@ -2,6 +2,7 @@ import React from 'react';
 import PokemonCard from './PokemonCard';
 
 function PokemonList({ pokemons, onPokemonSelect }) {
+  // si pas de pokémons
   if (!pokemons || pokemons.length === 0) {
     return (
       <div className="empty-state">
@@ -19,8 +20,8 @@ function PokemonList({ pokemons, onPokemonSelect }) {
       
       <div className="pokemon-grid">
         {pokemons.map(pokemon => (
-          <PokemonCard 
-            key={pokemon.id} 
+          <PokemonCard
+            key={pokemon.id}
             pokemon={pokemon}
             onPokemonSelect={onPokemonSelect}
           />

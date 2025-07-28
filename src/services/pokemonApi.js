@@ -1,23 +1,23 @@
 const BASE_URL = 'https://pokeapi.co/api/v2';
+const POKEMON_PER_PAGE = 15;
 
 export const pokemonApi = {
-  async getPokemons(limit = 20) {
+  // récupérer les pokémons avec pagination
+  async getPokemons(page = 1) {
     try {
-      console.log(`Récupération de ${limit} Pokémons...`);
+      const offset = (page - 1) * POKEMON_PER_PAGE;
       
-      const response = await fetch(`${BASE_URL}/pokemon?limit=${limit}`);
+      const response = await fetch(`${BASE_URL}/pokemon?limit=${POKEMON_PER_PAGE}&offset=${offset}`);
       
       if (!response.ok) {
         throw new Error(`Erreur HTTP: ${response.status}`);
       }
       
       const data = await response.json();
-
-      const pokemonDetails = [];
       
-      for (let i = 0; i < data.results.length; i++) {
-        const pokemon = data.results[i];
-        
+      // récupérer les détails de chaque pokémon
+      const pokemonDetails = [];
+      for (let pokemon of data.results) {
         try {
           const detailResponse = await fetch(pokemon.url);
           if (detailResponse.ok) {
@@ -25,42 +25,100 @@ export const pokemonApi = {
             pokemonDetails.push(detail);
           }
         } catch (error) {
-          console.warn(`Erreur pour ${pokemon.name}:`, error);
         }
       }
 
-      console.log(`${pokemonDetails.length} Pokémons chargés avec succès`);
-      return pokemonDetails;
+      return {
+        pokemons: pokemonDetails,
+        total: data.count,
+        hasNext: data.next !== null,
+        hasPrevious: data.previous !== null,
+        totalPages: Math.ceil(data.count / POKEMON_PER_PAGE)
+      };
       
     } catch (error) {
-      console.error('Erreur dans getPokemons:', error);
+      throw new Error('Impossible de charger les Pokémon');
     }
   },
 
+  // rechercher par nom ou numéro
   async searchPokemon(searchTerm) {
     try {
-      console.log('Recherche de:', searchTerm);
-      
       if (!searchTerm || searchTerm.trim() === '') {
         return [];
       }
 
       const cleanSearchTerm = searchTerm.toLowerCase().trim();
       
+      // essayer de trouver directement
       const response = await fetch(`${BASE_URL}/pokemon/${cleanSearchTerm}`);
       
       if (response.ok) {
         const pokemon = await response.json();
-        console.log('Pokémon trouvé:', pokemon.name);
         return [pokemon];
       } else {
-        console.log('Pokémon non trouvé');
         return [];
       }
       
     } catch (error) {
-      console.error('Erreur lors de la recherche:', error);
       return [];
+    }
+  },
+
+  // récupérer tous les types
+  async getTypes() {
+    try {
+      const response = await fetch(`${BASE_URL}/type`);
+      
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      // filtrer les types bizarres
+      const mainTypes = data.results.filter(type => 
+        !['unknown', 'shadow'].includes(type.name)
+      );
+      
+      return mainTypes;
+      
+    } catch (error) {
+      throw new Error('Impossible de charger les types');
+    }
+  },
+
+  // récupérer pokémons d'un type
+  async getPokemonByType(typeName) {
+    try {
+      const response = await fetch(`${BASE_URL}/type/${typeName}`);
+      
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      // limite à 50
+      const pokemonUrls = data.pokemon.slice(0, 50).map(p => p.pokemon.url);
+      
+      // récupérer les détails
+      const pokemonDetails = [];
+      for (let url of pokemonUrls) {
+        try {
+          const response = await fetch(url);
+          if (response.ok) {
+            const pokemon = await response.json();
+            pokemonDetails.push(pokemon);
+          }
+        } catch (error) {
+        }
+      }
+      
+      return pokemonDetails;
+      
+    } catch (error) {
+      throw new Error(`Impossible de charger les Pokémon de type ${typeName}`);
     }
   }
 };

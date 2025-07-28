@@ -1,17 +1,8 @@
 import React, { useEffect } from 'react';
 
 function PokemonDetail({ pokemon, onClose }) {
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
-
+  // bloquer le scroll de la page
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
@@ -19,11 +10,13 @@ function PokemonDetail({ pokemon, onClose }) {
     };
   }, []);
 
-  const formatPokemonId = (id) => `#${id.toString().padStart(3, '0')}`;
+  // formatage des données
+  const formatId = (id) => `#${id.toString().padStart(3, '0')}`;
   const formatHeight = (height) => `${(height / 10).toFixed(1)}m`;
   const formatWeight = (weight) => `${(weight / 10).toFixed(1)}kg`;
 
-  const getTypeColor = (typeName) => {
+  // couleurs des types
+  const getTypeColor = (type) => {
     const colors = {
       fire: '#e74c3c', water: '#3498db', grass: '#27ae60',
       electric: '#f1c40f', psychic: '#9b59b6', ice: '#85c1e9',
@@ -32,11 +25,12 @@ function PokemonDetail({ pokemon, onClose }) {
       flying: '#85c1e9', bug: '#27ae60', rock: '#7f8c8d',
       ghost: '#9b59b6', steel: '#95a5a6', normal: '#bdc3c7'
     };
-    return colors[typeName] || '#95a5a6';
+    return colors[type] || '#95a5a6';
   };
 
-  const getStatName = (statName) => {
-    const statNames = {
+  // noms des stats en français
+  const getStatName = (stat) => {
+    const names = {
       'hp': 'Points de Vie',
       'attack': 'Attaque',
       'defense': 'Défense',
@@ -44,16 +38,18 @@ function PokemonDetail({ pokemon, onClose }) {
       'special-defense': 'Déf. Spé.',
       'speed': 'Vitesse'
     };
-    return statNames[statName] || statName;
+    return names[stat] || stat;
   };
 
-  const getStatBarColor = (statValue) => {
-    if (statValue >= 100) return '#e74c3c';
-    if (statValue >= 70) return '#f39c12';
-    if (statValue >= 40) return '#f1c40f';
+  // couleur des barres de stats
+  const getStatColor = (value) => {
+    if (value >= 100) return '#e74c3c';
+    if (value >= 70) return '#f39c12';
+    if (value >= 40) return '#f1c40f';
     return '#27ae60';
   };
 
+  // fermer en cliquant à côté
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -65,11 +61,7 @@ function PokemonDetail({ pokemon, onClose }) {
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
       <div className="modal-content">
-        <button 
-          className="modal-close" 
-          onClick={onClose}
-          aria-label="Fermer les détails"
-        >
+        <button className="modal-close" onClick={onClose}>
           X
         </button>
         
@@ -91,9 +83,10 @@ function PokemonDetail({ pokemon, onClose }) {
           </div>
           
           <h2 className="pokemon-detail-name">{pokemon.name}</h2>
-          <div className="pokemon-detail-id">{formatPokemonId(pokemon.id)}</div>
+          <div className="pokemon-detail-id">{formatId(pokemon.id)}</div>
         </div>
 
+        {/* types */}
         <div className="detail-section">
           <h3 className="detail-title">Types</h3>
           <div className="pokemon-types-detail">
@@ -109,6 +102,7 @@ function PokemonDetail({ pokemon, onClose }) {
           </div>
         </div>
 
+        {/* stats */}
         <div className="detail-section">
           <h3 className="detail-title">Statistiques</h3>
           <div className="stats-detail-grid">
@@ -122,7 +116,7 @@ function PokemonDetail({ pokemon, onClose }) {
                     className="stat-detail-fill"
                     style={{
                       width: `${Math.min((stat.base_stat / 200) * 100, 100)}%`,
-                      backgroundColor: getStatBarColor(stat.base_stat)
+                      backgroundColor: getStatColor(stat.base_stat)
                     }}
                   ></div>
                 </div>
@@ -132,6 +126,7 @@ function PokemonDetail({ pokemon, onClose }) {
           </div>
         </div>
 
+        {/* infos générales */}
         <div className="detail-section">
           <h3 className="detail-title">Informations</h3>
           <div className="info-detail-grid">
@@ -150,6 +145,7 @@ function PokemonDetail({ pokemon, onClose }) {
           </div>
         </div>
 
+        {/* capacités si elles existent */}
         {pokemon.abilities && pokemon.abilities.length > 0 && (
           <div className="detail-section">
             <h3 className="detail-title">Capacités</h3>
